@@ -1,0 +1,171 @@
+openapi: 3.0.0
+info:
+  title: Geostats API
+  description: "Allows searching various statistics in the United States by region,\
+    \ state, county, city, and zipcode."
+  version: "1.0"
+servers:
+- url: /
+paths:
+  /regions:
+    get:
+      summary: Returns the official regions in the United States
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Region'
+        "404":
+          description: operation unsuccessful
+  /regions/{code}:
+    get:
+      summary: "Returns a specific region, based on the given code"
+      parameters:
+      - name: code
+        in: path
+        description: a region's code
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Region'
+        "404":
+          description: operation unsuccessful
+  /regions/divisions:
+    get:
+      summary: Returns the official divisions in the United States
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Division'
+        "404":
+          description: operation unsuccessful
+  /regions/divisions/{code}:
+    get:
+      summary: "Returns a specific division, based on the given code"
+      parameters:
+      - name: code
+        in: path
+        description: a division's code
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Division'
+        "404":
+          description: operation unsuccessful
+  /regions/divisions/states:
+    get:
+      summary: Returns the official states in the United States
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/State'
+        "404":
+          description: operation unsuccessful
+  /regions/divisions/states/{code}:
+    get:
+      summary: "Returns a specific state, based on the given code"
+      parameters:
+      - name: code
+        in: path
+        description: a state's code
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/State'
+        "404":
+          description: operation unsuccessful
+components:
+  schemas:
+    State:
+      required:
+      - code
+      - name
+      - population
+      - postal
+      type: object
+      properties:
+        code:
+          type: integer
+        name:
+          type: string
+        postal:
+          type: string
+        population:
+          type: integer
+        division:
+          type: integer
+    Division:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          type: integer
+        name:
+          type: string
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/State'
+        region:
+          type: integer
+    Region:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          type: integer
+        name:
+          type: string
+        divisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Division'
+x-aws-api-id: yk119ouq42
